@@ -1,4 +1,7 @@
 <?php
+		//kutsume välja funktsioonide faili
+	require ("functions.php");
+
 	$firstName = "Kodanik";
 	$lastName = "Tundmatu";
 	$currentMonth = date("n");
@@ -16,26 +19,24 @@
 		'november',
 		'detsember'
 	];
-	$monthOptions = '';
-	for($i = 0; $i < count($monthNames); $i++) {
-		$selected = '';
-		if (isset($birthMonth)) {
-			if ($birthMonth == $i) {
-				$selected = 'selected';
-			}
-		} elseif ($currentMonth == $i) {
-			$selected = 'selected';
-		}
-		$monthOptions .= '<option value="' . $i . '" ' . $selected . ' >' . $monthNames[$i] . '</option>';
-	}
+	
 	//kontrollime, kas kasutaja on midagi kirjutanud
 	//var_dump($_POST);
 	if (isset($_POST["firstName"])){
-		$firstName = $_POST["firstName"];
+		//$firstName = $_POST["firstName"];
+		$firstName = test_input($_POST["firstName"]);
 	}
 	if (isset($_POST["lastName"])){
-		$lastName = $_POST["lastName"];
+		//$lastName = $_POST["lastName"];
+		$lastName = test_input($_POST["lastName"]);
 	}
+	
+	//täiesti mõttetu
+	function fullName(){
+		$GLOBALS["fullName"] = $GLOBALS["firstName"] ." ".$GLOBALS["lastName"];
+	}
+	$fullName ="";
+	fullname();
 ?>
 
 <!DOCTYPE html>
@@ -60,7 +61,7 @@
 	
 	<hr>
 	
-	<form method= "POST">
+	<form method= "POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 		<label>Eesnimi:</label>
 		<input type = "text" name="firstName">
 		<label>Perekonnanimi:</label>
@@ -88,7 +89,7 @@
 	<hr>
 	<?php 
 	if (isset($_POST["firstName"])){
-		echo "<p>Olete elanud järgnevastel aastatel: </p> \n";
+		echo "<p>".$fullName .","."Olete elanud järgnevastel aastatel: </p> \n";
 		echo "<ol> \n";
 	for($i = $_POST["birthYear"]; $i <= date("Y"); $i ++) {
 				echo "<li>" .$i ."</li> \n";
