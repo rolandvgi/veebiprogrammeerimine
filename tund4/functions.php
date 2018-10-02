@@ -7,9 +7,9 @@
 	function saveamsg($msg){
 		$notice = "";
 		//serveri ühendus (server, kasutaja, parool, andmebaas)
-
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
 		//valmistan ette SQL käsu
-		$stmt = $mysqli->prepare("INSERT INTO vpamsg (message) VALUES(?)");
+		$stmt = $mysqli->prepare("INSERT INTO vpamsg (message) VALUES (?)");
 		echo $mysqli->error;
 		//asendame SQL käsus küsimärgi päris infoga (andmetüüp,andmed ise)
 		//s - string; i- integer; d -decimal e murdarv;
@@ -24,20 +24,20 @@
 		return $notice;
 	}	
 	
-	function listallmessages();{
+	function listallmessages() {
 		$msgHTML = "";
-		$mysqli = new mysqli($GLOBALS["serverHost"],$GLOBALS["serverUsername"],$GLOBALS["serverPassword"],$GLOBALS["database"]);
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"],$GLOBALS["database"]);
 		$stmt = $mysqli->prepare("SELECT message FROM vpamsg");
 		echo $mysqli->error;
 		$stmt->bind_result($msg);
 		$stmt->execute();
 		while($stmt->fetch()){
-			
-		}	$msgHTML .="<p>" .$msg ."</p>\n";
-			$stmt->close();
-			$mysqli->close();
-			return $msgHTML;
-		
+		$msgHTML .="<p>" .$msg ."</p>\n";	
+		}
+		$stmt->close();
+		$mysqli->close();
+		return $msgHTML;
+	
 	}
 	
 	//tekstsisestuse kontroll
