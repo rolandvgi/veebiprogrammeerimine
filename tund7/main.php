@@ -33,6 +33,8 @@ if(isset($_GET["logout"])){
 	<ul>
       <li><a href="?logout=1">Logi välja!</a></li>
       <li> <a href="validatemsg.php">Valideeri anonüümseid sõnumeid!</a></li>
+      <li> Näita valideeritud<a href="validatedmessages.php">sõnumeid</a>valideerijate kaupa!</li>
+      <li><a href ="userprofiles.php">Kasutaja profiili täitmine</li>
 	</ul>
 	
   </body>

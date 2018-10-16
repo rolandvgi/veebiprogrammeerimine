@@ -1,6 +1,6 @@
 <?php
   require("functions.php");
-
+  $notice = "";
    //kui pole sisse loginud siis logimise lehele
    if(!isset($_SESSION["userid"])){ 
     header("location: index_1.php");
@@ -16,8 +16,14 @@ if(isset($_GET["logout"])){
     exit();
 }
 if(isset($_GET["id"])){
+	$msgid = $_GET["id"];
     $msg = readmsgforvalidation($_GET["id"]);
 }
+if (isset($_POST["submitValidation"]) and isset($_POST["id"])){
+	$msgid = readmsgforvalidation($_GET["id"]);
+	$msg = readmsgforvalidation($_GET["id"]);
+	$notice = validatemsg($_POST["id"], $_POST["validation"], $_SESSION["userid"]);
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -35,14 +41,17 @@ if(isset($_GET["id"])){
   </ul>
   <hr>
   <h2>Valideeri see sõnum:</h2>
-  <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+  <form method="POST">
     <input name="id" type="hidden" value="<?php echo $_GET["id"]; ?>">
     <p><?php echo $msg; ?></p>
     <input type="radio" name="validation" value="0" checked><label>Keela näitamine</label><br>
     <input type="radio" name="validation" value="1"><label>Luba näitamine</label><br>
     <input type="submit" value="Kinnita" name="submitValidation">
+	<span><?php echo $notice;?></span>
   </form>
   <hr>
+  
+  
 
 </body>
 </html>

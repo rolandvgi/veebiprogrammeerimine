@@ -30,10 +30,7 @@ if(isset($_GET["logout"])){
 	<p>See leht on valminud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
 	<hr>
     <p>Oled sisse loginud nimega: <?php echo $_SESSION["firstName"]. " " .$_SESSION["lastName"]. ".";?></p>
-	<ul>
-      <li><a href="?logout=1">Logi välja!</a></li>
-      <li> <a href="validatemsg.php">Valideeri anonüümseid sõnumeid!</a></li>
-	</ul>
+	<p><?php echo users();?></p>
 	
   </body>
 </html>

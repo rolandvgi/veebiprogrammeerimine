@@ -48,7 +48,7 @@ if (isset($_POST["login"])) {
 	<p><a href="addmsg.php">Lisa sõnum</a>!</p>
 	<hr>
 	<div>
-	  <?php echo allvalidmessages(); ?>
+	  <?php echo listallmessages(); ?>
 	</div>
 	
   </body>

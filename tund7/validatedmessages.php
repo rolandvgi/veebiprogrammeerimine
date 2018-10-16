@@ -16,7 +16,7 @@ if(isset($_GET["logout"])){
     exit();
 }
 
-$messages = readallunvalidatedmessages();
+$messages = readallvalidatedmessagesbyuser();
 ?>
 <!DOCTYPE html>
 <html>
