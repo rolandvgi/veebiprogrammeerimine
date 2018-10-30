@@ -17,6 +17,9 @@ if(isset($_GET["logout"])){
     header("location: index_1.php");
     exit();
 }
+$pagetitle = "Pealeht";
+require("header.php");
+
 if (!isset($_POST["bgcolor"])){
   $notice = "error";
 }
@@ -34,10 +37,15 @@ else if (!isset($_POST["txtcolor"])){
 <html>
   <head>
     <meta charset="utf-8">
-	<title>pealeht</title>
+	<title>pealeht</title>  
+     <?php 
+        echo "<style>" .
+            "body{background-color:" . $_SESSION["bgcolor"] . " \n" .
+            "color: ".$_SESSION["txtcolor"] ."} /n" .
+            "</style>";
+    ?>
   </head>
   <body>
-    <h1>Pealeht</h1>
 	<p>See leht on valminud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
 	<hr>
     <p>Oled sisse loginud nimega: <?php echo $_SESSION["firstName"]. " " .$_SESSION["lastName"]. ".";?></p>
@@ -45,13 +53,9 @@ else if (!isset($_POST["txtcolor"])){
       <li><a href="?logout=1">Logi välja!</a></li>
       <li> <a href="validatemsg.php">Valideeri anonüümseid sõnumeid!</a></li>
       <li> Näita valideeritud<a href="validatedmessages.php">sõnumeid</a>valideerijate kaupa!</li>
+      <li>Fotode <a href="photoupload.php">üleslaadimine </li>
       <li><a href ="userprofiles.php">Kasutaja profiili täitmine</li>
-      <style>
-	body{
-		background-color: <?php echo $mybgcolor ?>;
-		color: <?php echo  $mytxtcolor ?>;
-	}
-	</style>
+  
 	</ul>
 	
   </body>

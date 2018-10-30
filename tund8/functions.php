@@ -10,21 +10,19 @@
 	 function storeuserprofile($desc, $bgcol, $txtcol){
 		$notice = "";
 		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
-		$stmt = $mysqli->prepare("SELECT description, bgcolor, txtcolor FROM vpuserprofiles1 WHERE userid=?");
+		$stmt = $mysqli->prepare("SELECT description, bgcolor, txtcolor FROM vpuserprofiles WHERE userid=?");
 		echo $mysqli->error;
-		$stmt->bind_param("i", $_SESSION["userId"]);
-		$stmt->bind_result($description, $bgcolor, $txtcolor);
+		$stmt->bind_param("i", $_SESSION["userid"]);
+		$stmt->bind_result($description, $bgcol, $txtcol);
 		$stmt->execute();
 		if($stmt->fetch()){
 			//profiil juba olemas, uuendame
 			$stmt->close();
-			$stmt = $mysqli->prepare("UPDATE vpuserprofiles1 SET description=?, bgcolor=?, txtcolor=? WHERE id=?");
+			$stmt = $mysqli->prepare("UPDATE vpuserprofiles SET description=?, bgcolor=?, txtcolor=? WHERE id=?");
 			echo $mysqli->error;
-			$stmt->bind_param("sssi", $desc, $bgcol, $txtcol, $_SESSION["userId"]);
+			$stmt->bind_param("sssi", $desc, $bgcol, $txtcol, $_SESSION["userid"]);
 			if($stmt->execute()){
 				$notice = "Profiil edukalt uuendatud!";
-				$_SESSION["bgColor"] = $bgcol;
-				$_SESSION["txtColor"] = $txtcol;
 			} else {
 				$notice = "Profiili uuendamisel tekkis tõrge! " .$stmt->error;
 			}
@@ -32,9 +30,9 @@
 			//profiili pole, salvestame
 			$stmt->close();
 			//INSERT INTO vpusers3 (firstname, lastname, birthdate, gender, email, password) VALUES(?,?,?,?,?,?)"
-			$stmt = $mysqli->prepare("INSERT INTO vpuserprofiles1 (userid, description, bgcolor, txtcolor) VALUES(?,?,?,?)");
+			$stmt = $mysqli->prepare("INSERT INTO vpuserprofiles (userid, description, bgcolor, txtcolor) VALUES(?,?,?,?)");
 			echo $mysqli->error;
-			$stmt->bind_param("isss", $_SESSION["userId"], $desc, $bgcol, $txtcol);
+			$stmt->bind_param("isss", $_SESSION["userid"], $desc, $bgcol, $txtcol);
 			if($stmt->execute()){
 				$notice = "Profiil edukalt salvestatud!";
 				$_SESSION["bgColor"] = $bgcol;
@@ -47,15 +45,27 @@
 		$mysqli->close();
 		return $notice;
 	  }
-	function updateprofile(){
+	  function showmyprofile(){
 		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
-		$stmt = $mysqli->prepare("UPDATE vpuserprofiles (userid, description, bgcolor, txtcolor) VALUES (?, ?, ?, ?)");
+		$stmt = $mysqli->prepare("SELECT description, bgcolor, txtcolor FROM vpuserprofiles WHERE userid=?");
 		echo $mysqli->error;
-		$stmt->bind_param("isss", $userid , $mydescription, $mybgcolor, $mytxtcolor);
+		$stmt->bind_param("i", $_SESSION["userid"]);
+		$stmt->bind_result($description, $bgcolor, $txtcolor);
+		$stmt->execute();
+		$profile = new Stdclass();
+		if($stmt->fetch()){
+			$profile->description = $description;
+			$profile->bgcolor = $bgcolor;
+			$profile->txtcolor = $txtcolor;
+		} else {
+			$profile->description = "Pole tutvustust lisanud!";
+			$profile->bgcolor = "#FFFFFF";
+			$profile->txtcolor = "#000000";
+		}
 		$stmt->close();
 		$mysqli->close();
-		return $notice;
-}
+		return $profile;
+	  }
 	function userprofiles($userid, $mybgcolor, $mytxtcolor, $mydescription){
 		$totalhtml = "";
 		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
